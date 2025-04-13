@@ -1,0 +1,11 @@
+{
+  "permissions": [
+    "core:default",
+    "core:window:default",
+    "core:tray:default",
+    "dialog:default",
+    "notification:default",
+    "fs:default",
+    "shell:default"
+  ]
+}

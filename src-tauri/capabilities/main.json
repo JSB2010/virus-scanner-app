@@ -1,0 +1,24 @@
+{
+  "identifier": "main-capability",
+  "description": "Capability for the main window",
+  "windows": ["main", "setup", "scan-progress", "results"],
+  "permissions": [
+    "core:default",
+    "core:app:default",
+    "core:event:default",
+    "core:path:default",
+    "core:resources:default",
+    "core:tray:default",
+    "core:window:default",
+    "dialog:default",
+    "notification:default",
+    "shell:allow-open",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        { "path": "$DOWNLOAD" },
+        { "path": "$DOWNLOAD/**" }
+      ]
+    }
+  ]
+}

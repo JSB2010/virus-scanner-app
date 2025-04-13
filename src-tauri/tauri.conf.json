@@ -1,0 +1,89 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../build"
+  },
+  "identifier": "com.virustotalscanner.app",
+  "productName": "VirusTotal Scanner",
+  "version": "1.0.0",
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
+    },
+    "macOS": {
+      "frameworks": [],
+      "minimumSystemVersion": "10.13",
+      "exceptionDomain": "virustotal.com",
+      "signingIdentity": null,
+      "entitlements": "entitlements.plist"
+    }
+  },
+  "app": {
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' https://www.virustotal.com https://*.virustotal.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'"
+    },
+    "withGlobalTauri": true,
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "VirusTotal Scanner",
+        "width": 1000,
+        "height": 750,
+        "minWidth": 800,
+        "minHeight": 600,
+        "center": true,
+        "visible": true,
+        "focus": true,
+        "alwaysOnTop": false,
+        "skipTaskbar": false,
+        "decorations": true,
+        "fullscreen": false,
+        "resizable": true,
+        "maximized": false
+      },
+      {
+        "label": "setup",
+        "title": "Setup - VirusTotal Scanner",
+        "width": 800,
+        "height": 600,
+        "center": true,
+        "visible": false
+      },
+      {
+        "label": "scan-progress",
+        "title": "Scanning...",
+        "width": 400,
+        "height": 200,
+        "decorations": false,
+        "center": true,
+        "visible": false
+      },
+      {
+        "label": "results",
+        "title": "Scan Results",
+        "width": 600,
+        "height": 800,
+        "center": true,
+        "visible": false
+      }
+    ]
+  }
+}

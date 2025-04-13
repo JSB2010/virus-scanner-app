@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VirusTotal Scanner</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      color: #2563eb;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .welcome-content {
+      margin: 2rem 0;
+    }
+
+    .api-key-input {
+      margin-top: 2rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.25rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>VirusTotal Scanner</h1>
+      <p>Protect your system by scanning files with VirusTotal's powerful scanning engine</p>
+    </header>
+
+    <div class="welcome-card">
+      <h2>Welcome to VirusTotal Scanner</h2>
+      <p>This application helps you scan files for viruses using VirusTotal's extensive virus detection engines.</p>
+
+      <div class="welcome-content">
+        <h3>Key Features:</h3>
+        <ul>
+          <li>Automatic monitoring of your Downloads folder</li>
+          <li>Scan files with 70+ antivirus engines</li>
+          <li>Detailed scan results and threat information</li>
+          <li>Quarantine management for suspicious files</li>
+          <li>System tray integration for easy access</li>
+        </ul>
+
+        <div class="api-key-input">
+          <h3>Set Up Your VirusTotal API Key</h3>
+          <p>To use this app, you'll need a free VirusTotal API key.</p>
+
+          <label for="api-key">Your VirusTotal API Key:</label>
+          <input
+            id="api-key"
+            type="password"
+            placeholder="Enter your API key"
+          />
+          <p>Your API key is stored locally and is only used to communicate with VirusTotal.</p>
+
+          <button id="complete-setup">Complete Setup</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>File Scanning</h3>
+        <p>Scan any file on your system with a single click to check for viruses and malware.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📂</div>
+        <h3>Downloads Monitoring</h3>
+        <p>Automatically detect and scan new files in your Downloads folder for immediate protection.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Quarantine Management</h3>
+        <p>Safely isolate suspicious files to prevent them from harming your system.</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>VirusTotal Scanner App - Version 1.0.0</p>
+    </footer>
+  </div>
+
+  <script>
+    // Check if we're running in Tauri
+    const isTauri = window.__TAURI__ !== undefined;
+    console.log('Running in Tauri:', isTauri);
+
+    // Function to save API key
+    async function saveApiKey(apiKey) {
+      if (isTauri) {
+        try {
+          // Use Tauri API to save the API key
+          await window.__TAURI__.invoke('save_api_key', { apiKey });
+          console.log('API key saved successfully');
+          return true;
+        } catch (error) {
+          console.error('Failed to save API key:', error);
+          // Fallback to localStorage if Tauri API fails
+          localStorage.setItem('virustotal_api_key', apiKey);
+          return true;
+        }
+      } else {
+        // In browser mode, just use localStorage
+        localStorage.setItem('virustotal_api_key', apiKey);
+        return true;
+      }
+    }
+
+    // Function to start monitoring downloads folder
+    async function startMonitoring() {
+      if (isTauri) {
+        try {
+          // Use Tauri API to start monitoring
+          await window.__TAURI__.invoke('start_monitoring_downloads');
+          console.log('Started monitoring downloads folder');
+        } catch (error) {
+          console.error('Failed to start monitoring:', error);
+        }
+      } else {
+        console.log('Download monitoring not available in browser mode');
+      }
+    }
+
+    // Handle setup completion
+    document.getElementById('complete-setup').addEventListener('click', async function() {
+      const apiKey = document.getElementById('api-key').value;
+      if (apiKey) {
+        const saved = await saveApiKey(apiKey);
+        if (saved) {
+          alert('Setup completed! You can now use the VirusTotal Scanner.');
+          // Start monitoring downloads folder
+          await startMonitoring();
+
+          // In a real app, we would navigate to the main interface
+          // For now, just update the UI to show success
+          document.querySelector('.api-key-input').innerHTML = `
+            <h3>Setup Complete!</h3>
+            <p>Your API key has been saved and the scanner is now active.</p>
+            <p>The application will monitor your Downloads folder for new files.</p>
+            <button id="scan-file">Scan a File Now</button>
+          `;
+
+          // Add event listener for scan button
+          document.getElementById('scan-file').addEventListener('click', async function() {
+            if (isTauri) {
+              try {
+                // Open file dialog
+                const filePath = await window.__TAURI__.dialog.open({
+                  multiple: false,
+                  filters: [{
+                    name: 'All Files',
+                    extensions: ['*']
+                  }]
+                });
+
+                if (filePath) {
+                  alert(`Scanning file: ${filePath}`);
+                  // In a real app, we would invoke a Tauri command to scan the file
+                }
+              } catch (error) {
+                console.error('Failed to open file dialog:', error);
+                alert('Could not open file dialog');
+              }
+            } else {
+              alert('File scanning is only available in the desktop app');
+            }
+          });
+        } else {
+          alert('Failed to save API key. Please try again.');
+        }
+      } else {
+        alert('Please enter your VirusTotal API key to continue.');
+      }
+    });
+
+    // Handle errors that might cause the 500 Internal Error
+    window.addEventListener('error', function(event) {
+      console.error('Global error caught:', event.error);
+    });
+
+    // Add a global error boundary
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.error('Global onerror caught:', { message, source, lineno, colno, error });
+      return true; // Prevents the default error handling
+    };
+  </script>
+</body>
+</html>
